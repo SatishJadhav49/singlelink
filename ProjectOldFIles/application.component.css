@@ -1,0 +1,9 @@
+.p-md-5 {
+  padding: 2.5rem !important;
+}
+
+.col-md-4 {
+  display: flex;
+  justify-content: center;
+}
+

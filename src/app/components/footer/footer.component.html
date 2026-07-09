@@ -1,0 +1,31 @@
+<footer class="footer">
+  <div class="footer__inner">
+
+    <div class="footer__brand">
+      <span class="footer__logo">M</span>
+      <div>
+        <div class="footer__title">{{ portal.APP_TITLE }}</div>
+        <div class="footer__tag">{{ portal.TAGLINE }}</div>
+      </div>
+    </div>
+
+    <div class="footer__support">
+      <div class="footer__support-label">Need help?</div>
+      <a class="footer__mail" [href]="mailtoLink">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="4" width="20" height="16" rx="2"/>
+          <path d="m22 7-10 6L2 7"/>
+        </svg>
+        {{ portal.SUPPORT_EMAIL }}
+      </a>
+      <a class="footer__ticket" [href]="portal.MSOLVE_URL" target="_blank" rel="noopener noreferrer">
+        Raise a ticket on MSolve &rarr;
+      </a>
+    </div>
+
+  </div>
+
+  <div class="footer__bottom">
+    &copy; {{ year }} {{ portal.COMPANY }} All rights reserved. &nbsp;|&nbsp; For internal use only.
+  </div>
+</footer>

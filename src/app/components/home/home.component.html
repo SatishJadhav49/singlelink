@@ -1,0 +1,185 @@
+<!-- ============ HERO / SEARCH BAND ============ -->
+<section class="hero">
+  <div class="hero__inner">
+    <h1 class="hero__title">
+      Welcome<span *ngIf="userName">, {{ userName.split(' ')[0] }}</span>
+    </h1>
+    <p class="hero__subtitle">{{ portal.TAGLINE }} Launch any application or dashboard you have access to.</p>
+
+    <div class="hero__search">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/>
+        <path d="m21 21-4.3-4.3"/>
+      </svg>
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        placeholder="Search applications or dashboards…"
+        aria-label="Search applications or dashboards" />
+      <button *ngIf="searchTerm" class="hero__clear" (click)="searchTerm = ''" aria-label="Clear search">&times;</button>
+    </div>
+
+    <div class="hero__stats" *ngIf="!loadingApps">
+      <span><strong>{{ applications.length }}</strong> applications</span>
+      <span class="hero__dot"></span>
+      <span><strong>{{ dashboards.length }}</strong> Power BI dashboards</span>
+    </div>
+  </div>
+</section>
+
+<div class="page">
+
+  <!-- ============ ERROR STATE ============ -->
+  <div class="alert" *ngIf="loadError">
+    <strong>Couldn't load your applications.</strong>
+    Please retry, or write to <a [href]="mailtoLink">{{ portal.SUPPORT_EMAIL }}</a> if the problem persists.
+    <button class="btn btn--primary alert__retry" (click)="loadEverything()">Retry</button>
+  </div>
+
+  <!-- ============ MY APPLICATIONS ============ -->
+  <section class="section">
+    <div class="section__head">
+      <h2 class="section__title">My Applications</h2>
+      <span class="section__count" *ngIf="!loadingApps">{{ filteredApplications.length }}</span>
+    </div>
+
+    <!-- Skeleton loaders -->
+    <div class="grid" *ngIf="loadingApps">
+      <div class="skeleton-card" *ngFor="let s of [1,2,3,4,5,6,7,8]"></div>
+    </div>
+
+    <div class="grid" *ngIf="!loadingApps">
+      <div
+        class="app-card"
+        *ngFor="let item of filteredApplications; let i = index; trackBy: trackByApp"
+        (click)="onAppNavigate(item.Application_Route, item.Application_Name)"
+        [style.--accent]="accentFor(i)"
+        role="button"
+        tabindex="0"
+        (keydown.enter)="onAppNavigate(item.Application_Route, item.Application_Name)">
+
+        <div class="app-card__top">
+          <div class="app-card__avatar">{{ initials(item.Application_Name) }}</div>
+
+          <!-- Power BI shortcut (does not trigger the card click) -->
+          <a
+            *ngIf="item.PowerBI"
+            class="app-card__pbi"
+            [href]="item.PowerBI"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Open Power BI report"
+            (click)="$event.stopPropagation()">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
+              <rect x="4" y="12" width="4" height="8" rx="1"/>
+              <rect x="10" y="7" width="4" height="13" rx="1"/>
+              <rect x="16" y="3" width="4" height="17" rx="1"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="app-card__name">{{ item.Application_Name }}</div>
+        <div class="app-card__open">
+          Open application
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 17 17 7M7 7h10v10"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <p class="empty" *ngIf="!loadingApps && filteredApplications.length === 0 && !loadError">
+      No applications match "<strong>{{ searchTerm }}</strong>".
+    </p>
+  </section>
+
+  <!-- ============ POWER BI DASHBOARDS ============ -->
+  <section class="section">
+    <div class="section__head">
+      <h2 class="section__title">
+        <span class="pbi-mark">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+            <rect x="4" y="12" width="4" height="8" rx="1"/>
+            <rect x="10" y="7" width="4" height="13" rx="1"/>
+            <rect x="16" y="3" width="4" height="17" rx="1"/>
+          </svg>
+        </span>
+        Power BI Dashboards
+      </h2>
+      <span class="section__count" *ngIf="!loadingDashboards">{{ filteredDashboards.length }}</span>
+    </div>
+
+    <div class="dash-list" *ngIf="loadingDashboards">
+      <div class="skeleton-row" *ngFor="let s of [1,2,3]"></div>
+    </div>
+
+    <div class="dash-list" *ngIf="!loadingDashboards">
+      <a
+        class="dash-card"
+        *ngFor="let dash of filteredDashboards; trackBy: trackByDashboard"
+        [href]="dash.Dashboard_Url"
+        target="_blank"
+        rel="noopener noreferrer">
+
+        <div class="dash-card__icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <rect x="4" y="12" width="4" height="8" rx="1"/>
+            <rect x="10" y="7" width="4" height="13" rx="1"/>
+            <rect x="16" y="3" width="4" height="17" rx="1"/>
+          </svg>
+        </div>
+
+        <div class="dash-card__body">
+          <div class="dash-card__name">{{ dash.Dashboard_Name }}</div>
+          <div class="dash-card__desc">{{ dash.Description }}</div>
+        </div>
+
+        <span class="dash-card__workspace">{{ dash.Workspace }}</span>
+
+        <svg class="dash-card__arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M7 17 17 7M7 7h10v10"/>
+        </svg>
+      </a>
+    </div>
+
+    <p class="empty" *ngIf="!loadingDashboards && filteredDashboards.length === 0">
+      <ng-container *ngIf="searchTerm; else noDash">No dashboards match "<strong>{{ searchTerm }}</strong>".</ng-container>
+      <ng-template #noDash>No Power BI dashboards assigned to you yet.</ng-template>
+    </p>
+  </section>
+
+  <!-- ============ SUPPORT ============ -->
+  <section class="section">
+    <div class="section__head">
+      <h2 class="section__title">Help &amp; Support</h2>
+    </div>
+
+    <div class="support-grid">
+      <a class="support-card" [href]="portal.MSOLVE_URL" target="_blank" rel="noopener noreferrer">
+        <div class="support-card__icon support-card__icon--ticket">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="support-card__title">Raise a Ticket</div>
+          <div class="support-card__desc">Facing an issue or need access? Log a ticket on MSolve and our team will pick it up.</div>
+        </div>
+      </a>
+
+      <a class="support-card" [href]="mailtoLink">
+        <div class="support-card__icon support-card__icon--mail">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="4" width="20" height="16" rx="2"/>
+            <path d="m22 7-10 6L2 7"/>
+          </svg>
+        </div>
+        <div>
+          <div class="support-card__title">Email the Team</div>
+          <div class="support-card__desc">Write to us directly at <strong>{{ portal.SUPPORT_EMAIL }}</strong> for any query or feedback.</div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+</div>

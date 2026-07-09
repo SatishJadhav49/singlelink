@@ -1,0 +1,32 @@
+<header class="header">
+  <div class="header__inner">
+
+    <!-- Brand -->
+    <div class="header__brand">
+      <div class="header__logo">M</div>
+      <div class="header__brand-text">
+        <span class="header__brand-name">{{ portal.APP_TITLE }}</span>
+        <span class="header__brand-sub">{{ portal.COMPANY }}</span>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="header__actions">
+      <a class="btn btn--ghost" [href]="mailtoLink" title="Email the support team">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="4" width="20" height="16" rx="2"/>
+          <path d="m22 7-10 6L2 7"/>
+        </svg>
+        <span class="btn__label">Email Support</span>
+      </a>
+
+      <a class="btn btn--primary" [href]="portal.MSOLVE_URL" target="_blank" rel="noopener noreferrer" title="Raise a ticket on MSolve">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/>
+        </svg>
+        <span class="btn__label">Raise a Ticket</span>
+      </a>
+    </div>
+
+  </div>
+</header>
