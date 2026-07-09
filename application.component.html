@@ -1,0 +1,74 @@
+<main class="position-relative vh-100">
+  <!-- Background image -->
+  <div
+    class="position-fixed top-0 start-0 w-100 h-100"
+    style="
+      background-image: url(&quot;assets/logo.png&quot;);
+      background-size: cover;
+      background-position: center;
+    "
+  ></div>
+
+  <!-- Transparent overlay -->
+  <div
+    class="position-fixed top-0 start-0 w-100 h-100 bg-black"
+    style="opacity: 0.5"
+  ></div>
+
+  <!-- Content -->
+  <div class="position-relative z-1">
+    <app-header></app-header>
+
+    <router-outlet></router-outlet>
+  </div>
+
+  <section class="py-4">
+    <div class="row g-4 m-0">
+      <div
+        class="col-12 col-sm-6 col-lg-3 col-md-4"
+        *ngFor="let item of applications"
+      >
+        <div
+          class="shadow rounded-lg p-4 p-md-5 cursor-pointer transition-all"
+          style="
+            background-color: darkseagreen !important;
+            border-radius: 15px;
+            width: 92%;
+            position: relative;
+          "
+        >
+          <!-- Title -->
+          <div style="text-align: center">
+            <a
+              (click)="onAppNavigate(item.Application_Route,item.Application_Name)"
+              class="h2 fw-bold text-dark text-decoration-none d-block"
+              style="color: #333; font-size: 1.1rem"
+            >
+              {{ item.Application_Name }}
+            </a>
+          </div>
+
+          <!-- Power BI Icon pinned top-right -->
+          <a
+            *ngIf="item.PowerBI"
+            [href]="item.PowerBI"
+            target="_blank"
+            style="
+              position: absolute;
+              top: 10px;
+              right: 10px;
+              padding: 5px;
+              border-radius: 8px;
+            "
+          >
+            <img
+              src="assets/Powerbi.png"
+              alt="Power BI"
+              style="width: 24px; height: 24px"
+            />
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
