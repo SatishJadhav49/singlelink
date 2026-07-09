@@ -1,30 +1,35 @@
-<header class="header">
-  <div class="header__inner">
+<header class="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+  <!-- Mahindra red accent line -->
+  <div class="h-[3px] bg-gradient-to-r from-brand to-brand-dark"></div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
 
     <!-- Brand -->
-    <div class="header__brand">
-      <div class="header__logo">M</div>
-      <div class="header__brand-text">
-        <span class="header__brand-name">{{ portal.APP_TITLE }}</span>
-        <span class="header__brand-sub">{{ portal.COMPANY }}</span>
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-lg bg-brand text-white text-xl font-extrabold grid place-items-center shrink-0 -tracking-wider">M</div>
+      <div class="leading-tight">
+        <div class="text-base font-bold text-ink">{{ portal.APP_TITLE }}</div>
+        <div class="text-[11px] text-slate-500 tracking-wide hidden sm:block">{{ portal.COMPANY }}</div>
       </div>
     </div>
 
     <!-- Actions -->
-    <div class="header__actions">
-      <a class="btn btn--ghost" [href]="mailtoLink" title="Email the support team">
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <div class="flex items-center gap-2">
+      <a [href]="mailtoLink" title="Email the support team"
+         class="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3.5 py-2 text-sm font-semibold text-ink transition hover:bg-slate-50 hover:border-gray-300">
+        <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <rect x="2" y="4" width="20" height="16" rx="2"/>
           <path d="m22 7-10 6L2 7"/>
         </svg>
-        <span class="btn__label">Email Support</span>
+        <span class="hidden sm:inline">Email Support</span>
       </a>
 
-      <a class="btn btn--primary" [href]="portal.MSOLVE_URL" target="_blank" rel="noopener noreferrer" title="Raise a ticket on MSolve">
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <a [href]="portal.MSOLVE_URL" target="_blank" rel="noopener noreferrer" title="Raise a ticket on MSolve"
+         class="inline-flex items-center gap-2 rounded-lg bg-brand px-3.5 py-2 text-sm font-semibold text-white transition hover:bg-brand-dark hover:shadow-lg hover:shadow-brand/30">
+        <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/>
         </svg>
-        <span class="btn__label">Raise a Ticket</span>
+        <span class="hidden sm:inline">Raise a Ticket</span>
       </a>
     </div>
 

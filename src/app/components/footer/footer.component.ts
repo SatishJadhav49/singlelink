@@ -4,8 +4,7 @@ import { PORTAL } from '../../app.constants';
 @Component({
   selector: 'app-footer',
   standalone: true,
-  templateUrl: './footer.component.html',
-  styleUrl: './footer.component.css'
+  templateUrl: './footer.component.html'
 })
 export class FooterComponent {
   readonly portal = PORTAL;

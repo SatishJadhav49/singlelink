@@ -1,62 +1,9 @@
-/* ================= Global design tokens ================= */
-:root {
-  --brand-red: #e31837;   /* Mahindra red */
-  --ink: #1d2530;         /* dark navy text */
-  --muted: #64748b;
-  --border: #e4e7ec;
-  --surface: #f5f6f8;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-* { box-sizing: border-box; }
-
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-}
-
-body {
-  font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', Arial, sans-serif;
-  background: var(--surface);
-  color: var(--ink);
-  -webkit-font-smoothing: antialiased;
-}
-
-/* ================= Shared buttons ================= */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  border: none;
-  border-radius: 10px;
-  padding: 0.55rem 1rem;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: none;
-  transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
-  white-space: nowrap;
-}
-
-.btn:active { transform: translateY(1px); }
-
-.btn--primary {
-  background: var(--brand-red);
-  color: #fff;
-}
-
-.btn--primary:hover {
-  background: #c31230;
-  box-shadow: 0 4px 12px rgba(227, 24, 55, 0.3);
-}
-
-.btn--ghost {
-  background: #fff;
-  color: var(--ink);
-  border: 1px solid var(--border);
-}
-
-.btn--ghost:hover {
-  background: #f8f9fb;
-  border-color: #cfd4dc;
+@layer base {
+  body {
+    @apply bg-slate-100 text-ink antialiased;
+  }
 }

@@ -9,8 +9,7 @@ import { PORTAL } from '../../app.constants';
   selector: 'app-home',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  templateUrl: './home.component.html'
 })
 export class HomeComponent implements OnInit {
 
@@ -26,9 +25,6 @@ export class HomeComponent implements OnInit {
 
   searchTerm = '';
   userName = '';
-
-  /** Accent palette cycled across app tiles (professional, muted tones). */
-  private readonly accents = ['#e31837', '#0e5fa8', '#0f766e', '#7c3aed', '#b45309', '#334155'];
 
   constructor(private applicationService: ApplicationService) { }
 
@@ -111,10 +107,6 @@ export class HomeComponent implements OnInit {
     const words = name.replace(/[^a-zA-Z0-9 ]/g, ' ').trim().split(/\s+/);
     if (words.length >= 2) return (words[0][0] + words[1][0]).toUpperCase();
     return name.substring(0, 2).toUpperCase();
-  }
-
-  accentFor(index: number): string {
-    return this.accents[index % this.accents.length];
   }
 
   trackByApp(_: number, item: ApplicationLinks): string {

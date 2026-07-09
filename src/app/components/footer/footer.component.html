@@ -1,31 +1,33 @@
-<footer class="footer">
-  <div class="footer__inner">
+<footer class="mt-auto bg-ink text-slate-300">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8 flex flex-wrap items-start justify-between gap-6">
 
-    <div class="footer__brand">
-      <span class="footer__logo">M</span>
+    <div class="flex items-center gap-3">
+      <span class="w-9 h-9 rounded-lg bg-brand text-white text-lg font-extrabold grid place-items-center">M</span>
       <div>
-        <div class="footer__title">{{ portal.APP_TITLE }}</div>
-        <div class="footer__tag">{{ portal.TAGLINE }}</div>
+        <div class="text-white font-bold text-sm">{{ portal.APP_TITLE }}</div>
+        <div class="text-xs text-slate-400">{{ portal.TAGLINE }}</div>
       </div>
     </div>
 
-    <div class="footer__support">
-      <div class="footer__support-label">Need help?</div>
-      <a class="footer__mail" [href]="mailtoLink">
-        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <div class="flex flex-col items-start gap-1.5">
+      <div class="text-[11px] uppercase tracking-widest text-slate-400">Need help?</div>
+      <a [href]="mailtoLink"
+         class="inline-flex items-center gap-2 text-sm font-semibold text-white transition hover:text-rose-300">
+        <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <rect x="2" y="4" width="20" height="16" rx="2"/>
           <path d="m22 7-10 6L2 7"/>
         </svg>
         {{ portal.SUPPORT_EMAIL }}
       </a>
-      <a class="footer__ticket" [href]="portal.MSOLVE_URL" target="_blank" rel="noopener noreferrer">
+      <a [href]="portal.MSOLVE_URL" target="_blank" rel="noopener noreferrer"
+         class="text-xs text-slate-400 transition hover:text-white">
         Raise a ticket on MSolve &rarr;
       </a>
     </div>
 
   </div>
 
-  <div class="footer__bottom">
+  <div class="border-t border-white/10 px-4 py-3.5 text-center text-xs text-slate-400">
     &copy; {{ year }} {{ portal.COMPANY }} All rights reserved. &nbsp;|&nbsp; For internal use only.
   </div>
 </footer>

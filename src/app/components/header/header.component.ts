@@ -4,8 +4,7 @@ import { PORTAL } from '../../app.constants';
 @Component({
   selector: 'app-header',
   standalone: true,
-  templateUrl: './header.component.html',
-  styleUrl: './header.component.css'
+  templateUrl: './header.component.html'
 })
 export class HeaderComponent {
   readonly portal = PORTAL;

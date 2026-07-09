@@ -1,13 +1,15 @@
 <!-- ============ HERO / SEARCH BAND ============ -->
-<section class="hero">
-  <div class="hero__inner">
-    <h1 class="hero__title">
+<section class="bg-gradient-to-br from-[#171e29] to-[#232c3b] text-white px-4 sm:px-6 py-12">
+  <div class="max-w-7xl mx-auto">
+    <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
       Welcome<span *ngIf="userName">, {{ userName.split(' ')[0] }}</span>
     </h1>
-    <p class="hero__subtitle">{{ portal.TAGLINE }} Launch any application or dashboard you have access to.</p>
+    <p class="mt-1 mb-6 text-sm text-slate-400 max-w-xl">
+      {{ portal.TAGLINE }} Launch any application or dashboard you have access to.
+    </p>
 
-    <div class="hero__search">
-      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <div class="flex items-center gap-2.5 bg-white rounded-xl px-4 h-12 max-w-xl shadow-xl shadow-black/25 text-slate-400">
+      <svg viewBox="0 0 24 24" class="w-[18px] h-[18px] shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="11" cy="11" r="8"/>
         <path d="m21 21-4.3-4.3"/>
       </svg>
@@ -15,90 +17,98 @@
         type="text"
         [(ngModel)]="searchTerm"
         placeholder="Search applications or dashboards…"
-        aria-label="Search applications or dashboards" />
-      <button *ngIf="searchTerm" class="hero__clear" (click)="searchTerm = ''" aria-label="Clear search">&times;</button>
+        aria-label="Search applications or dashboards"
+        class="flex-1 h-full bg-transparent text-sm text-ink outline-none placeholder:text-slate-400" />
+      <button *ngIf="searchTerm" (click)="searchTerm = ''" aria-label="Clear search"
+              class="w-6 h-6 rounded-full bg-slate-100 text-slate-500 text-base leading-none grid place-items-center hover:bg-slate-200">&times;</button>
     </div>
 
-    <div class="hero__stats" *ngIf="!loadingApps">
-      <span><strong>{{ applications.length }}</strong> applications</span>
-      <span class="hero__dot"></span>
-      <span><strong>{{ dashboards.length }}</strong> Power BI dashboards</span>
+    <div class="flex items-center gap-3 mt-4 text-sm text-slate-400" *ngIf="!loadingApps">
+      <span><strong class="text-white">{{ applications.length }}</strong> applications</span>
+      <span class="w-1 h-1 rounded-full bg-slate-600"></span>
+      <span><strong class="text-white">{{ dashboards.length }}</strong> Power BI dashboards</span>
     </div>
   </div>
 </section>
 
-<div class="page">
+<div class="max-w-7xl mx-auto w-full px-4 sm:px-6 pt-8 pb-14">
 
   <!-- ============ ERROR STATE ============ -->
-  <div class="alert" *ngIf="loadError">
+  <div class="flex flex-wrap items-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3.5 mb-6 text-sm text-rose-900" *ngIf="loadError">
     <strong>Couldn't load your applications.</strong>
-    Please retry, or write to <a [href]="mailtoLink">{{ portal.SUPPORT_EMAIL }}</a> if the problem persists.
-    <button class="btn btn--primary alert__retry" (click)="loadEverything()">Retry</button>
+    Please retry, or write to <a class="font-bold underline" [href]="mailtoLink">{{ portal.SUPPORT_EMAIL }}</a> if the problem persists.
+    <button class="ml-auto rounded-lg bg-brand px-4 py-1.5 text-sm font-semibold text-white hover:bg-brand-dark" (click)="loadEverything()">Retry</button>
   </div>
 
   <!-- ============ MY APPLICATIONS ============ -->
-  <section class="section">
-    <div class="section__head">
-      <h2 class="section__title">My Applications</h2>
-      <span class="section__count" *ngIf="!loadingApps">{{ filteredApplications.length }}</span>
+  <section class="mb-11">
+    <div class="flex items-center gap-2.5 mb-4">
+      <h2 class="text-lg font-bold text-ink">My Applications</h2>
+      <span class="rounded-full bg-slate-200/70 px-2.5 py-0.5 text-xs font-bold text-slate-500" *ngIf="!loadingApps">{{ filteredApplications.length }}</span>
     </div>
 
     <!-- Skeleton loaders -->
-    <div class="grid" *ngIf="loadingApps">
-      <div class="skeleton-card" *ngFor="let s of [1,2,3,4,5,6,7,8]"></div>
+    <div class="grid gap-3 grid-cols-[repeat(auto-fill,minmax(240px,1fr))]" *ngIf="loadingApps">
+      <div class="h-[60px] rounded-xl bg-slate-200 animate-pulse" *ngFor="let s of [1,2,3,4,5,6,7,8]"></div>
     </div>
 
-    <div class="grid" *ngIf="!loadingApps">
+    <div class="grid gap-3 grid-cols-[repeat(auto-fill,minmax(240px,1fr))]" *ngIf="!loadingApps">
       <div
-        class="app-card"
-        *ngFor="let item of filteredApplications; let i = index; trackBy: trackByApp"
+        *ngFor="let item of filteredApplications; trackBy: trackByApp"
         (click)="onAppNavigate(item.Application_Route, item.Application_Name)"
-        [style.--accent]="accentFor(i)"
+        (keydown.enter)="onAppNavigate(item.Application_Route, item.Application_Name)"
         role="button"
         tabindex="0"
-        (keydown.enter)="onAppNavigate(item.Application_Route, item.Application_Name)">
+        [title]="item.Application_Name"
+        class="group flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-3.5 py-3 cursor-pointer transition
+               hover:border-brand/40 hover:shadow-md hover:shadow-slate-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand">
 
-        <div class="app-card__top">
-          <div class="app-card__avatar">{{ initials(item.Application_Name) }}</div>
-
-          <!-- Power BI shortcut (does not trigger the card click) -->
-          <a
-            *ngIf="item.PowerBI"
-            class="app-card__pbi"
-            [href]="item.PowerBI"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="Open Power BI report"
-            (click)="$event.stopPropagation()">
-            <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
-              <rect x="4" y="12" width="4" height="8" rx="1"/>
-              <rect x="10" y="7" width="4" height="13" rx="1"/>
-              <rect x="16" y="3" width="4" height="17" rx="1"/>
-            </svg>
-          </a>
+        <!-- Monogram: neutral by default, brand on hover — keeps the grid calm -->
+        <div class="w-9 h-9 shrink-0 grid place-items-center rounded-lg bg-slate-100 text-xs font-bold text-slate-500 transition
+                    group-hover:bg-brand group-hover:text-white">
+          {{ initials(item.Application_Name) }}
         </div>
 
-        <div class="app-card__name">{{ item.Application_Name }}</div>
-        <div class="app-card__open">
-          Open application
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M7 17 17 7M7 7h10v10"/>
+        <div class="flex-1 min-w-0 text-sm font-semibold text-ink truncate">
+          {{ item.Application_Name }}
+        </div>
+
+        <!-- Power BI shortcut (does not trigger the card click) -->
+        <a
+          *ngIf="item.PowerBI"
+          [href]="item.PowerBI"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Open Power BI report"
+          (click)="$event.stopPropagation()"
+          class="w-7 h-7 shrink-0 grid place-items-center rounded-md text-amber-500/70 transition hover:bg-amber-100 hover:text-amber-600">
+          <svg viewBox="0 0 24 24" class="w-4 h-4" fill="currentColor">
+            <rect x="4" y="12" width="4" height="8" rx="1"/>
+            <rect x="10" y="7" width="4" height="13" rx="1"/>
+            <rect x="16" y="3" width="4" height="17" rx="1"/>
           </svg>
-        </div>
+        </a>
+
+        <!-- Open arrow, revealed on hover -->
+        <svg viewBox="0 0 24 24" class="w-4 h-4 shrink-0 text-brand opacity-0 transition group-hover:opacity-100"
+             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M7 17 17 7M7 7h10v10"/>
+        </svg>
       </div>
     </div>
 
-    <p class="empty" *ngIf="!loadingApps && filteredApplications.length === 0 && !loadError">
+    <p class="rounded-xl border border-dashed border-gray-300 bg-white p-6 text-center text-sm text-slate-500"
+       *ngIf="!loadingApps && filteredApplications.length === 0 && !loadError">
       No applications match "<strong>{{ searchTerm }}</strong>".
     </p>
   </section>
 
   <!-- ============ POWER BI DASHBOARDS ============ -->
-  <section class="section">
-    <div class="section__head">
-      <h2 class="section__title">
-        <span class="pbi-mark">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+  <section class="mb-11">
+    <div class="flex items-center gap-2.5 mb-4">
+      <h2 class="flex items-center gap-2 text-lg font-bold text-ink">
+        <span class="w-6 h-6 grid place-items-center rounded-md bg-amber-400 text-amber-950">
+          <svg viewBox="0 0 24 24" class="w-3.5 h-3.5" fill="currentColor">
             <rect x="4" y="12" width="4" height="8" rx="1"/>
             <rect x="10" y="7" width="4" height="13" rx="1"/>
             <rect x="16" y="3" width="4" height="17" rx="1"/>
@@ -106,77 +116,82 @@
         </span>
         Power BI Dashboards
       </h2>
-      <span class="section__count" *ngIf="!loadingDashboards">{{ filteredDashboards.length }}</span>
+      <span class="rounded-full bg-slate-200/70 px-2.5 py-0.5 text-xs font-bold text-slate-500" *ngIf="!loadingDashboards">{{ filteredDashboards.length }}</span>
     </div>
 
-    <div class="dash-list" *ngIf="loadingDashboards">
-      <div class="skeleton-row" *ngFor="let s of [1,2,3]"></div>
+    <div class="flex flex-col gap-2.5" *ngIf="loadingDashboards">
+      <div class="h-16 rounded-xl bg-slate-200 animate-pulse" *ngFor="let s of [1,2,3]"></div>
     </div>
 
-    <div class="dash-list" *ngIf="!loadingDashboards">
+    <div class="grid gap-2.5 grid-cols-[repeat(auto-fill,minmax(320px,1fr))]" *ngIf="!loadingDashboards">
       <a
-        class="dash-card"
         *ngFor="let dash of filteredDashboards; trackBy: trackByDashboard"
         [href]="dash.Dashboard_Url"
         target="_blank"
-        rel="noopener noreferrer">
+        rel="noopener noreferrer"
+        class="group flex items-center gap-3.5 rounded-xl border border-gray-200 bg-white px-4 py-3 transition
+               hover:border-amber-300 hover:shadow-md hover:shadow-slate-200">
 
-        <div class="dash-card__icon">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+        <div class="w-9 h-9 shrink-0 grid place-items-center rounded-lg bg-amber-50 text-amber-500">
+          <svg viewBox="0 0 24 24" class="w-[18px] h-[18px]" fill="currentColor">
             <rect x="4" y="12" width="4" height="8" rx="1"/>
             <rect x="10" y="7" width="4" height="13" rx="1"/>
             <rect x="16" y="3" width="4" height="17" rx="1"/>
           </svg>
         </div>
 
-        <div class="dash-card__body">
-          <div class="dash-card__name">{{ dash.Dashboard_Name }}</div>
-          <div class="dash-card__desc">{{ dash.Description }}</div>
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-semibold text-ink truncate">{{ dash.Dashboard_Name }}</div>
+          <div class="text-xs text-slate-500 truncate">{{ dash.Description }}</div>
         </div>
 
-        <span class="dash-card__workspace">{{ dash.Workspace }}</span>
+        <span class="shrink-0 rounded-full bg-sky-50 px-2.5 py-0.5 text-[11px] font-bold text-sky-700">{{ dash.Workspace }}</span>
 
-        <svg class="dash-card__arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg viewBox="0 0 24 24" class="w-4 h-4 shrink-0 text-slate-300 transition group-hover:text-brand"
+             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M7 17 17 7M7 7h10v10"/>
         </svg>
       </a>
     </div>
 
-    <p class="empty" *ngIf="!loadingDashboards && filteredDashboards.length === 0">
+    <p class="rounded-xl border border-dashed border-gray-300 bg-white p-6 text-center text-sm text-slate-500"
+       *ngIf="!loadingDashboards && filteredDashboards.length === 0">
       <ng-container *ngIf="searchTerm; else noDash">No dashboards match "<strong>{{ searchTerm }}</strong>".</ng-container>
       <ng-template #noDash>No Power BI dashboards assigned to you yet.</ng-template>
     </p>
   </section>
 
   <!-- ============ SUPPORT ============ -->
-  <section class="section">
-    <div class="section__head">
-      <h2 class="section__title">Help &amp; Support</h2>
+  <section>
+    <div class="mb-4">
+      <h2 class="text-lg font-bold text-ink">Help &amp; Support</h2>
     </div>
 
-    <div class="support-grid">
-      <a class="support-card" [href]="portal.MSOLVE_URL" target="_blank" rel="noopener noreferrer">
-        <div class="support-card__icon support-card__icon--ticket">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <div class="grid gap-3 sm:grid-cols-2">
+      <a [href]="portal.MSOLVE_URL" target="_blank" rel="noopener noreferrer"
+         class="flex items-start gap-4 rounded-xl border border-gray-200 bg-white p-5 transition hover:border-brand/40 hover:shadow-md hover:shadow-slate-200">
+        <div class="w-11 h-11 shrink-0 grid place-items-center rounded-xl bg-rose-50 text-brand">
+          <svg viewBox="0 0 24 24" class="w-[22px] h-[22px]" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/>
           </svg>
         </div>
         <div>
-          <div class="support-card__title">Raise a Ticket</div>
-          <div class="support-card__desc">Facing an issue or need access? Log a ticket on MSolve and our team will pick it up.</div>
+          <div class="font-bold text-ink mb-0.5">Raise a Ticket</div>
+          <div class="text-sm leading-relaxed text-slate-500">Facing an issue or need access? Log a ticket on MSolve and our team will pick it up.</div>
         </div>
       </a>
 
-      <a class="support-card" [href]="mailtoLink">
-        <div class="support-card__icon support-card__icon--mail">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <a [href]="mailtoLink"
+         class="flex items-start gap-4 rounded-xl border border-gray-200 bg-white p-5 transition hover:border-sky-300 hover:shadow-md hover:shadow-slate-200">
+        <div class="w-11 h-11 shrink-0 grid place-items-center rounded-xl bg-sky-50 text-sky-700">
+          <svg viewBox="0 0 24 24" class="w-[22px] h-[22px]" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="2" y="4" width="20" height="16" rx="2"/>
             <path d="m22 7-10 6L2 7"/>
           </svg>
         </div>
         <div>
-          <div class="support-card__title">Email the Team</div>
-          <div class="support-card__desc">Write to us directly at <strong>{{ portal.SUPPORT_EMAIL }}</strong> for any query or feedback.</div>
+          <div class="font-bold text-ink mb-0.5">Email the Team</div>
+          <div class="text-sm leading-relaxed text-slate-500">Write to us directly at <strong>{{ portal.SUPPORT_EMAIL }}</strong> for any query or feedback.</div>
         </div>
       </a>
     </div>
